@@ -2681,10 +2681,7 @@ function bindLoginLabelsGuard(){
   if(!host)return;
   const forceNow=()=>enforceLoginLabels();
   forceNow();
-  try{
-    const obs=new MutationObserver(()=>forceNow());
-    obs.observe(host,{subtree:true,childList:true,characterData:true});
-  }catch(_){}
+  /* لا نستخدم MutationObserver هنا: enforceLoginLabels يعدّل النصوص فيطلق المراقب مرّة أخرى = حلقة لا نهائية وتجمّد الصفحة */
   try{setInterval(forceNow,1200);}catch(_){}
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>applyUiLanguage());
