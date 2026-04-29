@@ -2836,6 +2836,9 @@ function canOpenViewByRole(role,viewId){
   if(!r||r==='super_admin')return true;
   const v=safeString(viewId).trim();
   const rk=staffLikeUiRole(r);
+  if(rk==='receptionist'&&v==='notif'){
+    return true;
+  }
   const reqByRole={
     /* لوحة التحكم دائماً متاحة كصفحة رئيسية — لا تربطها بصلاحية حتى لا يُحجب الدخول */
     receptionist:{students:'عرض قائمة الطلاب',parents:'عرض أولياء الأمور',payments:'عرض المدفوعات',exams:'عرض الامتحانات',settings:'تعديل إعدادات الأكاديمية',notif:'عرض الإشعارات'},
@@ -2877,7 +2880,7 @@ function togSb(){
 }
 
 async function nav(id){
-  if(!canOpenViewByRole(PROF&&PROF.role,id)){
+  if(safeTrim(id)!=='notif'&&!canOpenViewByRole(PROF&&PROF.role,id)){
     toast('لا تملك صلاحية فتح هذا القسم','err');
     return;
   }
@@ -5416,6 +5419,7 @@ const ROLE_PERM_DEFAULTS_BY_ROLE={
     ['إضافة طالب جديد','فعّال'],
     ['تعديل بيانات الطالب','فعّال'],
     ['حذف طالب','معطّل'],
+    ['عرض الإشعارات','فعّال'],
     ['عرض أولياء الأمور','فعّال'],
     ['إضافة ولي أمر','فعّال'],
     ['تعديل بيانات ولي الأمر','فعّال'],
