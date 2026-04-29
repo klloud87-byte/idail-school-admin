@@ -2715,6 +2715,12 @@ function syncScreenFromHash(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncScreenFromHash);
 else syncScreenFromHash();
 window.addEventListener('hashchange',syncScreenFromHash);
+window.addEventListener('message',function(e){
+  try{
+    if(!e.data||e.data.type!=='idail-open-login')return;
+    goToLogin();
+  }catch(_){}
+});
 async function doLogin(){
   showFileProtocolWarningIfNeeded();
   const u=safeTrim(document.getElementById('lgU').value);

@@ -168,14 +168,29 @@ footer{background:var(--sb-bg);padding:60px 60px 28px}.footer-grid{display:grid;
 <script>
 function openLogin(){
   try{
+    const topWin=window.top||window.parent;
+    if(topWin&&topWin!==window){
+      if(typeof topWin.goToLogin==='function'){
+        topWin.goToLogin();
+        return false;
+      }
+      try{
+        topWin.location.hash='#login';
+        return false;
+      }catch(_){}
+      try{
+        topWin.postMessage({type:'idail-open-login'},'*');
+        return false;
+      }catch(_){}
+    }
+  }catch(_){}
+  try{
     if(window.parent&&window.parent!==window&&typeof window.parent.goToLogin==='function'){
       window.parent.goToLogin();
       return false;
     }
   }catch(_){}
-  try{
-    window.location.href='index.html#login';
-  }catch(_){}
+  window.location.href='index.html#login';
   return false;
 }
 document.querySelectorAll('.lang-pill').forEach(pill=>{pill.addEventListener('click',function(){document.querySelectorAll('.lang-pill').forEach(p=>p.classList.remove('active'));this.classList.add('active');});});
