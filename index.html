@@ -2707,6 +2707,14 @@ function goToHome(){
   document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
   document.getElementById('sc-home')?.classList.add('on');
 }
+function syncScreenFromHash(){
+  const h=safeLower(String(location.hash||'').replace('#','').trim());
+  if(h==='login'){goToLogin();return;}
+  if(h==='home'){goToHome();return;}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncScreenFromHash);
+else syncScreenFromHash();
+window.addEventListener('hashchange',syncScreenFromHash);
 async function doLogin(){
   showFileProtocolWarningIfNeeded();
   const u=safeTrim(document.getElementById('lgU').value);
