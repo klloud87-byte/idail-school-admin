@@ -618,11 +618,11 @@ textarea.fi{resize:vertical;min-height:80px}
         <p>أدخل اسم المستخدم وكلمة المرور للمتابعة</p>
       </div>
       <div class="fld">
-        <label>اسم المستخدم</label>
+        <label id="lgULbl" for="lgU">اسم المستخدم</label>
         <input id="lgU" class="inp" type="text" placeholder="SA-001" autocomplete="username">
       </div>
       <div class="fld">
-        <label>كلمة المرور</label>
+        <label id="lgPLbl" for="lgP">كلمة المرور</label>
         <div class="inp-wrap">
           <input id="lgP" class="inp" type="password" placeholder="••••••••" autocomplete="current-password" style="padding-left:52px">
           <button class="inp-eye" id="eyeBtn" onclick="toggleEye()" type="button">إظهار</button>
@@ -2653,16 +2653,44 @@ function applyUiLanguage(langInput){
   });
   const loginTitleEl=document.querySelector('.lgn-header h2');if(loginTitleEl)loginTitleEl.textContent=t.loginTitle;
   const loginSubEl=document.querySelector('.lgn-header p');if(loginSubEl)loginSubEl.textContent=t.loginSub;
-  const userLbl=document.querySelector('label[for="lgU"], .fld:nth-of-type(1) label');if(userLbl)userLbl.textContent=t.user;
-  const passLbl=document.querySelector('label[for="lgP"], .fld:nth-of-type(2) label');if(passLbl)passLbl.textContent=t.pass;
+  enforceLoginLabels(t);
   const enterBtn=document.getElementById('lgBtn');if(enterBtn)enterBtn.textContent=t.enter;
   const topBtns=document.querySelectorAll('.tb-R .ib');
   if(topBtns[0])topBtns[0].childNodes[0].nodeValue=t.notif;
   if(topBtns[1])topBtns[1].textContent=t.account;
   if(topBtns[2])topBtns[2].textContent=t.logout;
 }
+function enforceLoginLabels(t){
+  const tr=t||{user:'اسم المستخدم',pass:'كلمة المرور'};
+  const userLbl=document.getElementById('lgULbl');
+  const passLbl=document.getElementById('lgPLbl');
+  if(userLbl)userLbl.textContent=tr.user;
+  if(passLbl)passLbl.textContent=tr.pass;
+  const userInput=document.getElementById('lgU');
+  const passInput=document.getElementById('lgP');
+  const userFallback=userInput&&userInput.closest('.fld')?userInput.closest('.fld').querySelector('label'):null;
+  const passFallback=passInput&&passInput.closest('.fld')?passInput.closest('.fld').querySelector('label'):null;
+  if(userFallback)userFallback.textContent=tr.user;
+  if(passFallback)passFallback.textContent=tr.pass;
+}
+let loginLabelsObserverBound=false;
+function bindLoginLabelsGuard(){
+  if(loginLabelsObserverBound)return;
+  loginLabelsObserverBound=true;
+  const host=document.querySelector('#sc-login .lgn-form-wrap');
+  if(!host)return;
+  const forceNow=()=>enforceLoginLabels();
+  forceNow();
+  try{
+    const obs=new MutationObserver(()=>forceNow());
+    obs.observe(host,{subtree:true,childList:true,characterData:true});
+  }catch(_){}
+  try{setInterval(forceNow,1200);}catch(_){}
+}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>applyUiLanguage());
 else applyUiLanguage();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bindLoginLabelsGuard);
+else bindLoginLabelsGuard();
 
 function toggleEye(){
   const inp=document.getElementById('lgP');
@@ -2673,6 +2701,7 @@ function toggleEye(){
 function goToLogin(){
   document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
   document.getElementById('sc-login').classList.add('on');
+  applyUiLanguage(localStorage.getItem('ui_lang')||'العربية');
 }
 function goToHome(){
   document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
