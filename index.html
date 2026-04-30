@@ -619,6 +619,32 @@ textarea.fi{resize:vertical;min-height:80px}
   .card-h h3{font-size:15px}
   .tbl th,.tbl td{font-size:13px}
   .btn,.btn-sm,.fi{font-size:13px}
+  .card{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .tbl{
+    min-width:640px;
+  }
+  .card-h,.tbl th,.tbl td{
+    padding-right:10px;
+    padding-left:10px;
+  }
+  .main{
+    width:100%;
+  }
+  .tbl-mobile-cards{display:grid;gap:10px;margin-top:8px}
+  .tbl-mobile-card{
+    background:var(--bg);border:1px solid var(--line);
+    border-radius:10px;padding:10px;
+  }
+  .tbl-mobile-row{
+    display:grid;grid-template-columns:120px 1fr;gap:8px;
+    align-items:start;padding:5px 0;border-bottom:1px dashed var(--line);
+  }
+  .tbl-mobile-row:last-child{border-bottom:none}
+  .tbl-mobile-k{font-size:11px;color:var(--muted);font-weight:700}
+  .tbl-mobile-v{font-size:13px;color:var(--ink);word-break:break-word}
 }
 
 /* ── Modal tabs: student ── */
@@ -2995,10 +3021,66 @@ async function nav(id){
   el.className='';
   const map={dash:rDash,students:rStudents,staff:rStaff,parents:rParents,payments:rPayments,classes:rClasses,timetable:rTimetable,notif:rNotif,audit:rAudit,settings:rSettings,profile:rProfile,reports:rReports,roles:rRoles,exams:rExams,grades:rGrades,attend:rAttend,children:rChildren};
   el.innerHTML=(map[id]?await map[id]():`<div class="empty"><div class="emj">قيد التطوير</div><p>هذا القسم سيكون متاحاً قريباً</p></div>`);
+  applyMobileTableCompaction();
   el.className='fade-in';
   if(id==='notif'){
     queueMicrotask(()=>{void markVisibleNotificationsRead();});
   }
+}
+function applyMobileTableCompaction(){
+  const host=document.getElementById('view');
+  if(!host)return;
+  host.querySelectorAll('.tbl-mobile-toggle').forEach(x=>x.remove());
+  host.querySelectorAll('.tbl-mobile-cards').forEach(x=>x.remove());
+  host.querySelectorAll('.tbl').forEach((tbl)=>{
+    const rows=[...tbl.querySelectorAll('tr')];
+    rows.forEach(r=>[...r.children].forEach(c=>{c.style.display='';}));
+    if(window.innerWidth>768){
+      tbl.style.display='';
+      return;
+    }
+    const headRow=tbl.querySelector('thead tr')||tbl.querySelector('tr');
+    const cols=headRow?headRow.children.length:0;
+    if(cols<3)return;
+    const headers=[...headRow.children].map(h=>safeTrim(h.textContent||'')||'—');
+    const bodyRows=[...tbl.querySelectorAll('tbody tr')];
+    if(!bodyRows.length)return;
+    const cards=document.createElement('div');
+    cards.className='tbl-mobile-cards';
+    cards.style.display='grid';
+    bodyRows.forEach((r)=>{
+      const tds=[...r.children];
+      const card=document.createElement('div');
+      card.className='tbl-mobile-card';
+      tds.forEach((td,i)=>{
+        const rw=document.createElement('div');
+        rw.className='tbl-mobile-row';
+        const k=document.createElement('div');
+        k.className='tbl-mobile-k';
+        k.textContent=headers[i]||'—';
+        const v=document.createElement('div');
+        v.className='tbl-mobile-v';
+        v.innerHTML=td.innerHTML;
+        rw.appendChild(k);rw.appendChild(v);
+        card.appendChild(rw);
+      });
+      cards.appendChild(card);
+    });
+    const toggleBtn=document.createElement('button');
+    toggleBtn.type='button';
+    toggleBtn.className='btn btn-sm tbl-mobile-toggle';
+    toggleBtn.style.margin='8px 0 8px 8px';
+    toggleBtn.textContent='عرض كجدول';
+    toggleBtn.onclick=()=>{
+      const showTable=tbl.style.display==='none';
+      tbl.style.display=showTable?'table':'none';
+      cards.style.display=showTable?'none':'grid';
+      toggleBtn.textContent=showTable?'عرض كبطاقات':'عرض كجدول';
+    };
+    tbl.style.display='none';
+    tbl.parentNode&&tbl.parentNode.insertBefore(toggleBtn,tbl);
+    tbl.parentNode&&tbl.parentNode.insertBefore(cards,tbl.nextSibling);
+  });
 }
 function upsertById(arr,row){
   const idx=arr.findIndex(x=>String(x.id)===String(row.id));
@@ -7249,6 +7331,10 @@ window.onerror=function(message,source){
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape')document.getElementById('ovr').classList.remove('on');
   if(e.key==='Enter'&&document.getElementById('sc-login').classList.contains('on')&&!document.getElementById('ovr').classList.contains('on'))doLogin();
+});
+window.addEventListener('resize',()=>{
+  if(!document.getElementById('sc-app').classList.contains('on'))return;
+  applyMobileTableCompaction();
 });
 </script>
 </body>
