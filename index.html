@@ -268,6 +268,14 @@ input,select,textarea,button{font-family:'Cairo',sans-serif}
   background:var(--white);border-radius:7px;
   color:var(--brand);font-size:16px;font-weight:800;
   align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 2px 10px rgba(194,24,91,.14);
+  transition:all .18s ease;
+}
+.mb-menu-btn:hover{transform:translateY(-1px);border-color:var(--brand);background:var(--brand-bg)}
+.tbl-mobile-toggle{
+  border-color:rgba(194,24,91,.28);
+  color:var(--brand);
+  background:linear-gradient(180deg,#fff 0%,#fff6fa 100%);
 }
 .ib{
   height:34px;min-width:34px;padding:0 10px;
@@ -590,10 +598,11 @@ textarea.fi{resize:vertical;min-height:80px}
   .sidebar{
     position:fixed;
     right:0;top:0;bottom:0;
-    width:248px;
+    width:274px;
     transform:translateX(105%);
     transition:transform .22s ease;
     z-index:120;
+    box-shadow:-14px 0 30px rgba(0,0,0,.28);
   }
   .sidebar.mob-open{transform:translateX(0)}
   .sb-tog{display:none}
@@ -605,18 +614,32 @@ textarea.fi{resize:vertical;min-height:80px}
   .mb-menu-btn{display:flex}
   .topbar{
     padding:10px 12px;
+    border-bottom:1px solid rgba(240,179,203,.45);
   }
   .tb-L h1{
-    font-size:16px;
+    font-size:18px;
   }
   .tb-L p{
-    font-size:12px;
+    font-size:11px;
   }
+  .tb-R{gap:5px}
+  .ib{height:32px;min-width:32px;padding:0 9px;font-size:11px}
 }
 @media(max-width:768px){
-  .content{padding:14px}
+  .content{padding:10px}
   .g2{grid-template-columns:1fr}
-  .card-h h3{font-size:15px}
+  .card{
+    border-radius:12px;
+    border-color:rgba(240,179,203,.5);
+    box-shadow:0 6px 22px rgba(194,24,91,.08);
+  }
+  .card-h{
+    padding:12px 11px;
+    background:linear-gradient(180deg,#140812 0%,#1a0b17 100%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .card-h h3{font-size:16px;color:#fff}
+  .card-h .cnt{background:rgba(194,24,91,.25);color:#ffd6e8}
   .tbl th,.tbl td{font-size:13px}
   .btn,.btn-sm,.fi{font-size:13px}
   .card{
@@ -635,16 +658,25 @@ textarea.fi{resize:vertical;min-height:80px}
   }
   .tbl-mobile-cards{display:grid;gap:10px;margin-top:8px}
   .tbl-mobile-card{
-    background:var(--bg);border:1px solid var(--line);
-    border-radius:10px;padding:10px;
+    background:linear-gradient(180deg,#121016 0%,#16121b 100%);
+    border:1px solid rgba(240,179,203,.26);
+    border-radius:12px;padding:11px;
+    box-shadow:0 8px 20px rgba(194,24,91,.10);
   }
   .tbl-mobile-row{
-    display:grid;grid-template-columns:120px 1fr;gap:8px;
-    align-items:start;padding:5px 0;border-bottom:1px dashed var(--line);
+    display:grid;grid-template-columns:112px 1fr;gap:8px;
+    align-items:start;padding:7px 0;border-bottom:1px dashed rgba(240,179,203,.24);
   }
   .tbl-mobile-row:last-child{border-bottom:none}
-  .tbl-mobile-k{font-size:11px;color:var(--muted);font-weight:700}
-  .tbl-mobile-v{font-size:13px;color:var(--ink);word-break:break-word}
+  .tbl-mobile-k{font-size:11px;color:#c8a5b2;font-weight:700}
+  .tbl-mobile-v{font-size:13px;color:#fff;word-break:break-word}
+  .tbl-mobile-toggle{
+    width:100%;
+    margin:8px 0 10px !important;
+    border-radius:10px;
+    padding:10px 12px;
+    font-weight:700;
+  }
 }
 
 /* ── Modal tabs: student ── */
