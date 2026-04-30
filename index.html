@@ -261,6 +261,14 @@ input,select,textarea,button{font-family:'Cairo',sans-serif}
 .tb-L h1{font-size:17px;font-weight:800;color:var(--ink)}
 .tb-L p{font-size:11px;color:var(--muted);margin-top:1px;letter-spacing:.2px}
 .tb-R{margin-right:auto;display:flex;align-items:center;gap:6px}
+.mb-menu-btn{
+  display:none;
+  width:34px;height:34px;min-width:34px;
+  border:1.5px solid var(--line2);
+  background:var(--white);border-radius:7px;
+  color:var(--brand);font-size:16px;font-weight:800;
+  align-items:center;justify-content:center;cursor:pointer;
+}
 .ib{
   height:34px;min-width:34px;padding:0 10px;
   border:1.5px solid var(--line2);
@@ -577,7 +585,41 @@ textarea.fi{resize:vertical;min-height:80px}
 }
 
 @media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.content{padding:14px}.g2{grid-template-columns:1fr}}
+@media(max-width:900px){
+  #sc-app{position:relative}
+  .sidebar{
+    position:fixed;
+    right:0;top:0;bottom:0;
+    width:248px;
+    transform:translateX(105%);
+    transition:transform .22s ease;
+    z-index:120;
+  }
+  .sidebar.mob-open{transform:translateX(0)}
+  .sb-tog{display:none}
+  .sb-backdrop{
+    position:fixed;inset:0;background:rgba(10,4,8,.45);
+    z-index:110;display:none;
+  }
+  .sb-backdrop.on{display:block}
+  .mb-menu-btn{display:flex}
+  .topbar{
+    padding:10px 12px;
+  }
+  .tb-L h1{
+    font-size:16px;
+  }
+  .tb-L p{
+    font-size:12px;
+  }
+}
+@media(max-width:768px){
+  .content{padding:14px}
+  .g2{grid-template-columns:1fr}
+  .card-h h3{font-size:15px}
+  .tbl th,.tbl td{font-size:13px}
+  .btn,.btn-sm,.fi{font-size:13px}
+}
 
 /* ── Modal tabs: student ── */
 .stu-form-onepage{max-height:min(72vh,calc(100vh - 200px));overflow-y:auto;padding-right:8px;margin-right:-4px}
@@ -656,8 +698,10 @@ textarea.fi{resize:vertical;min-height:80px}
       </div>
     </div>
   </aside>
+  <div class="sb-backdrop" id="sbBack" onclick="closeMobileSidebar()"></div>
   <main class="main">
     <div class="topbar">
+      <button class="mb-menu-btn" type="button" onclick="openMobileSidebar()" aria-label="menu">☰</button>
       <div class="tb-L">
         <h1 id="tbT">لوحة التحكم</h1>
         <p id="tbS">IDAIL School</p>
@@ -2914,12 +2958,29 @@ function buildNav(){
 }
 
 function togSb(){
+  if(window.innerWidth<=900){
+    openMobileSidebar();
+    return;
+  }
   slim=!slim;
   document.getElementById('sb').classList.toggle('slim',slim);
   document.getElementById('sbTog').textContent=slim?'▶':'◀';
 }
+function openMobileSidebar(){
+  const sb=document.getElementById('sb');
+  const bk=document.getElementById('sbBack');
+  if(sb)sb.classList.add('mob-open');
+  if(bk)bk.classList.add('on');
+}
+function closeMobileSidebar(){
+  const sb=document.getElementById('sb');
+  const bk=document.getElementById('sbBack');
+  if(sb)sb.classList.remove('mob-open');
+  if(bk)bk.classList.remove('on');
+}
 
 async function nav(id){
+  if(window.innerWidth<=900)closeMobileSidebar();
   if(safeTrim(id)!=='notif'&&!canOpenViewByRole(PROF&&PROF.role,id)){
     toast('لا تملك صلاحية فتح هذا القسم','err');
     return;
