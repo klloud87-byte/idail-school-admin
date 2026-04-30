@@ -67,6 +67,7 @@ input,select,textarea,button{font-family:'Cairo',sans-serif}
 .sc {
   display: none;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .sc.on {
@@ -251,7 +252,11 @@ input,select,textarea,button{font-family:'Cairo',sans-serif}
 .u-nm{font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
 .u-rl{font-size:10px;color:rgba(255,255,255,.35);white-space:nowrap;letter-spacing:.2px}
 
-.main{flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto}
+.main{
+  flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto;
+  min-height:100vh;min-height:100dvh;
+  -webkit-overflow-scrolling:touch;
+}
 .topbar{
   padding:12px 24px;background:rgba(255,248,250,.95);
   backdrop-filter:blur(16px);border-bottom:1px solid var(--line);
@@ -7373,6 +7378,14 @@ document.addEventListener('keydown',e=>{
 window.addEventListener('resize',()=>{
   if(!document.getElementById('sc-app').classList.contains('on'))return;
   applyMobileTableCompaction();
+});
+document.addEventListener('focusin',(e)=>{
+  const t=e&&e.target;
+  if(!t||!t.matches||!t.matches('input,textarea,select'))return;
+  if(window.innerWidth>900)return;
+  setTimeout(()=>{
+    try{t.scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}
+  },180);
 });
 </script>
 </body>
