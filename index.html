@@ -654,18 +654,40 @@ textarea.fi{resize:vertical;min-height:80px}
   }
   .tbl-mobile-cards{display:grid;gap:10px;margin-top:8px}
   .tbl-mobile-card{
-    background:linear-gradient(180deg,#121016 0%,#16121b 100%);
-    border:1px solid rgba(240,179,203,.26);
-    border-radius:12px;padding:11px;
-    box-shadow:0 8px 20px rgba(194,24,91,.10);
+    background:linear-gradient(180deg,#ffffff 0%,#fff7fa 100%);
+    border:1px solid rgba(240,179,203,.55);
+    border-radius:14px;padding:12px;
+    box-shadow:0 8px 18px rgba(194,24,91,.08);
   }
   .tbl-mobile-row{
     display:grid;grid-template-columns:112px 1fr;gap:8px;
-    align-items:start;padding:7px 0;border-bottom:1px dashed rgba(240,179,203,.24);
+    align-items:start;padding:8px 0;border-bottom:1px dashed rgba(240,179,203,.36);
   }
   .tbl-mobile-row:last-child{border-bottom:none}
-  .tbl-mobile-k{font-size:11px;color:#c8a5b2;font-weight:700}
-  .tbl-mobile-v{font-size:13px;color:#fff;word-break:break-word}
+  .tbl-mobile-k{
+    font-size:11px;color:#8f556a;font-weight:800;
+    letter-spacing:.25px;
+  }
+  .tbl-mobile-v{
+    font-size:13px;color:#2d1520;word-break:break-word;
+    line-height:1.45;
+  }
+  .tbl-mobile-v .badge{margin-top:2px}
+  .tbl-mobile-v .acts{
+    display:flex;flex-wrap:wrap;gap:6px;
+  }
+  .tbl-mobile-v .act,
+  .tbl-mobile-v .btn,
+  .tbl-mobile-v button{
+    min-height:32px;
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+  }
+  .tbl-mobile-v .act.del{
+    border-color:rgba(183,28,28,.35);
+  }
   .content>*{max-width:100%}
   .fi,.fg,.card,.prof-banner{min-width:0}
 }
