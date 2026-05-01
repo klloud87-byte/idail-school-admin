@@ -67,7 +67,6 @@ input,select,textarea,button{font-family:'Cairo',sans-serif}
 .sc {
   display: none;
   min-height: 100vh;
-  min-height: 100dvh;
 }
 
 .sc.on {
@@ -254,7 +253,6 @@ input,select,textarea,button{font-family:'Cairo',sans-serif}
 
 .main{
   flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto;
-  min-height:100vh;min-height:100dvh;
   -webkit-overflow-scrolling:touch;
 }
 .topbar{
@@ -594,6 +592,9 @@ textarea.fi{resize:vertical;min-height:80px}
 
 @media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){
+  .sc{min-height:auto}
+  #sc-app{min-height:auto}
+  .main{min-height:0;height:auto}
   #sc-app{position:relative}
   .sidebar{
     position:fixed;
